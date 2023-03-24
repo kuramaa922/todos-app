@@ -5,27 +5,27 @@ import NewTaskForm from '../NewTaskForm';
 import TaskList from '../TaskList';
 import Footer from '../Footer';
 export default class App extends React.Component {
-    tasksId = 4
+
     state = {
         todoData: [
             {
                 label: 'Completed task',
-                isCompleted: true,
+                done: true,
                 id: 1
             },
             {
-                label:  'Editing task',
-                isCompleted: false,
+                label:  'Active task',
+                done: false,
                 id: 2
             },
-            {
-                label: 'Active task',
-                isCompleted: false,
-                id: 3
-            }
+            // {
+            //     label: 'Active task',
+            //     isCompleted: false,
+            //     id: 3
+            // }
         ]
     }
-
+    tasksId = 3
 
     deleteItem = (id) => {
         this.setState(({ todoData }) => {
@@ -38,18 +38,35 @@ export default class App extends React.Component {
             }
         })
     }
+    onCompleted = (id) => {
+        this.setState(({ todoData }) => {
+            let completed = todoData.map((todo) => {
+                if (todo.id !== id) return todo;
+                return {
+                    ...todo,
+                    done: !todo.done,
+                };
+            });
+            return { todoData: completed };
+        });
+    };
 
     render() {
         const { todoData } = this.state
+        const doneCount = todoData.filter((el) => el.done).length
+        const tasksLeft = todoData.length - doneCount
 
         return (
             <section className="todoapp">
                 <NewTaskForm />
                 <TaskList
                     todos={todoData}
+                    onCompleted={this.onCompleted}
                     onDeleted={ this.deleteItem }
                 />
-                <Footer />
+                <Footer
+                    tasksLeft={tasksLeft}
+                />
             </section>
         )
     }
