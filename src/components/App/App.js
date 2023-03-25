@@ -51,6 +51,33 @@ export default class App extends React.Component {
         });
     };
 
+    createTask = (label) => {
+        return {
+            label,
+            done: false,
+            id: this.tasksId++
+        }
+    }
+
+    addTask = (text) => {
+        const newItem = this.createTask(text)
+        this.setState(({todoData}) => {
+            const newArr = [...todoData, newItem]
+            return {
+                todoData: newArr
+            }
+        })
+    }
+
+    clearCompleted = () => {
+        this.setState(({todoData}) => {
+            const deletedItems = todoData.filter((el) => !el.done)
+            return {
+                todoData: deletedItems
+            }
+        })
+    }
+
     render() {
         const { todoData } = this.state
         const doneCount = todoData.filter((el) => el.done).length
@@ -58,7 +85,8 @@ export default class App extends React.Component {
 
         return (
             <section className="todoapp">
-                <NewTaskForm />
+                <NewTaskForm
+                    onAdded={this.addTask}/>
                 <TaskList
                     todos={todoData}
                     onCompleted={this.onCompleted}
@@ -66,6 +94,7 @@ export default class App extends React.Component {
                 />
                 <Footer
                     tasksLeft={tasksLeft}
+                    clearCompleted={this.clearCompleted}
                 />
             </section>
         )
