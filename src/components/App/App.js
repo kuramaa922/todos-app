@@ -7,25 +7,10 @@ import Footer from '../Footer';
 export default class App extends React.Component {
 
     state = {
-        todoData: [
-            {
-                label: 'Completed task',
-                done: true,
-                id: 1
-            },
-            {
-                label:  'Active task',
-                done: false,
-                id: 2
-            },
-            // {
-            //     label: 'Active task',
-            //     isCompleted: false,
-            //     id: 3
-            // }
-        ]
+        todoData: [],
+        filter: 'All'
     }
-    tasksId = 3
+    tasksId = 1
 
     deleteItem = (id) => {
         this.setState(({ todoData }) => {
@@ -78,6 +63,25 @@ export default class App extends React.Component {
         })
     }
 
+    setFilter = (text) => {
+        this.setState({
+            filter: text
+        })
+    }
+
+    filterTasks = () => {
+        switch (this.state.filter) {
+            case "All":
+                return this.state.todoData;
+            case 'Active':
+                return this.state.todoData.filter((el) => !el.done);
+            case 'Completed':
+                return this.state.todoData.filter((el) => el.done)
+            default:
+                return this.state.todoData
+        }
+    }
+
     render() {
         const { todoData } = this.state
         const doneCount = todoData.filter((el) => el.done).length
@@ -88,13 +92,16 @@ export default class App extends React.Component {
                 <NewTaskForm
                     onAdded={this.addTask}/>
                 <TaskList
-                    todos={todoData}
+                    todos={this.filterTasks()}
                     onCompleted={this.onCompleted}
                     onDeleted={ this.deleteItem }
                 />
                 <Footer
+                    todos={todoData}
                     tasksLeft={tasksLeft}
                     clearCompleted={this.clearCompleted}
+                    filterBtn={this.setFilter}
+                    filter={this.state.filter}
                 />
             </section>
         )
