@@ -22,7 +22,7 @@ export default class App extends React.Component {
                 todoData: newArr
             }
         })
-    }
+    }   
     onCompleted = (id) => {
         this.setState(({ todoData }) => {
             let completed = todoData.map((todo) => {
@@ -40,6 +40,7 @@ export default class App extends React.Component {
         return {
             label,
             done: false,
+            time: new Date(),
             id: this.tasksId++
         }
     }
@@ -107,3 +108,4 @@ export default class App extends React.Component {
         )
     }
 }
+

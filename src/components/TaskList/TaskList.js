@@ -2,6 +2,7 @@ import React from "react";
 import classNames from "classnames";
 import Task from "../Task";
 import './TaskList.css'
+import propTypes from "prop-types";
 
 
 
@@ -15,7 +16,7 @@ export default function TaskList(props) {
     // ]
 
     const elements = todos.map((item) => {
-        const {id, label, done} = item
+        const {id, label, done, time} = item
         const className = classNames({
             completed: done,
             active: !done
@@ -27,6 +28,7 @@ export default function TaskList(props) {
                 <Task
                     label={label}
                     complete={done}
+                    time={time}
                     onCompleted={() => onCompleted(id)}
                     onDeleted={() => onDeleted(id)}
                 />
@@ -43,3 +45,14 @@ export default function TaskList(props) {
     )
 }
 
+TaskList.defaultProps = {
+    todos: [],
+    onCompleted: () => {},
+    onDeleted: () => {},
+}
+
+TaskList.propTypes = {
+    todos: propTypes.arrayOf(propTypes.object),
+    onCompleted: propTypes.func,
+    onDeleted: propTypes.func
+}

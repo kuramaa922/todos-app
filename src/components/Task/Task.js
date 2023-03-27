@@ -1,11 +1,41 @@
 import React from 'react';
 import './Task.css'
+import propTypes, {bool} from "prop-types";
+import { formatDistanceToNow } from "date-fns";
 
 
 export default class Task extends React.Component {
 
+
+    static defaultProps = {
+        complete: false,
+        time: new Date(),
+        onCompleted: () => {},
+        onDeleted: () => {},
+    }
+
+    static propTypes = {
+        complete: bool,
+        onCompleted: propTypes.func,
+        onDeleted: propTypes.func,
+    }
+
+    // setTaskTime = () => {
+    //     this.setState({
+    //         taskTime: formatDistanceToNow(this.props.time, {includeSeconds:true})
+    //     })
+    // }
+
+    // componentDidMount() {
+    //     this.setTaskTime()
+    // }
+    //
+    // componentWillUnmount() {
+    //     this.setTaskTime()
+    // }
+
     render() {
-        const { label, complete, onCompleted,onDeleted, id } = this.props
+        const { label, complete, onCompleted,onDeleted, id, time } = this.props
 
         return (
             <div className="view">
@@ -24,7 +54,7 @@ export default class Task extends React.Component {
                 { label }
                 </span>
                 <span className="created">
-                    Created 5 minutes ago
+                    {`created ${formatDistanceToNow(time, {includeSeconds:true})} ago`}
                 </span>
                 </label>
                 <button className="icon icon-edit"></button>
@@ -33,13 +63,6 @@ export default class Task extends React.Component {
                     onClick={onDeleted}
                 ></button>
             </div>
-            // {/*{ this.props.className === "editing" ? (*/}
-            // {/*    <input*/}
-            // {/*        type="text"*/}
-            // {/*        className="edit"*/}
-            // {/*        defaultValue="Editing task"*/}
-            // {/*    ></input>*/}
-            // {/*) : null }*/}
         );
     }
 }
